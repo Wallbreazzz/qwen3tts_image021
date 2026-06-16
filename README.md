@@ -1,5 +1,5 @@
 # qwen3tts_image021
-先拉取三个组件代码，报错vllm-omni的cherry-pick，按顺序执行即可
+先拉取三个组件代码，包括vllm-omni的cherry-pick，按顺序执行即可
 ```
 cd /vllm-workspace/vllm && git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin && git checkout v0.21.0 && cd ..
 cd /vllm-workspace/vllm-ascend && git remote add gcanlin https://github.com/gcanlin/vllm-ascend.git && git fetch gcanlin && git checkout cann85-with-v0.21.0-adapt && cd ..
