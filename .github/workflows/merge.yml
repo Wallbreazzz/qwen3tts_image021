@@ -6,9 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Merge chunks
-        run: |
-          cat custom.wav.b64.* | paste -sd "" | base64 -d > custom.wav
-          rm -f custom.wav.b64.* merge_wav.sh .github/workflows/merge.yml
+        run: python3 merge_chunks.py
       - name: Commit result
         run: |
           git config user.name Wallbreazzz
