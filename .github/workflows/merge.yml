@@ -1,5 +1,7 @@
 name: Merge custom.wav chunks
 on: [workflow_dispatch]
+permissions:
+  contents: write
 jobs:
   merge:
     runs-on: ubuntu-latest
