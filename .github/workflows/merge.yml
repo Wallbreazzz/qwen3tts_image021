@@ -1,0 +1,16 @@
+name: Merge custom.wav chunks
+on: [workflow_dispatch]
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          cat custom.wav.b64.* | base64 -d > custom.wav
+          rm -f custom.wav.b64.* merge_wav.sh
+      - run: |
+          git config user.name Wallbreazzz
+          git config user.email 110282866+Wallbreazzz@users.noreply.github.com
+          git add -A
+          git commit -m "Merge custom.wav chunks into single file"
+          git push
