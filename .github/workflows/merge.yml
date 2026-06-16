@@ -7,16 +7,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Merge chunks
         run: |
-          python3 -c "
-          import base64, glob
-          chunks = []
-          for f in sorted(glob.glob('custom.wav.b64.*')):
-              with open(f) as fh:
-                  chunks.append(fh.read().strip())
-          combined = ''.join(chunks)
-          with open('custom.wav', 'wb') as fh:
-              fh.write(base64.b64decode(combined))
-          "
+          cat custom.wav.b64.* | tr -d "
+" | base64 -d > custom.wav
           rm -f custom.wav.b64.* merge_wav.sh .github/workflows/merge.yml
       - name: Commit result
         run: |
