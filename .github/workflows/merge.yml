@@ -7,8 +7,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Merge chunks
         run: |
-          cat custom.wav.b64.* | tr -d "
-" | base64 -d > custom.wav
+          cat custom.wav.b64.* | paste -sd "" | base64 -d > custom.wav
           rm -f custom.wav.b64.* merge_wav.sh .github/workflows/merge.yml
       - name: Commit result
         run: |
