@@ -58,5 +58,43 @@ cd /vllm-workspace/vllm-omni && VLLM_OMNI_TARGET_DEVICE=npu pip install -e ".[np
 模型下载使用modelscpoe
 ```
 pip install modelscope
-modelscope download --model 'Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice' --local_dir '/path/to/qwen3_tts_CustomVoice'
+modelscope download --model 'Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign' --local_dir '/path/to/qwen3_tts_VoiceDesign'
+```
+
+拉起容器后进入容器部署模型服务
+```
+cd /workspace/
+export PYTHONPATH=/vllm-workspace/vllm:/vllm-workspace/vllm-omni:/vllm-workspace/vllm-ascend:$PYTHONPATH
+export ASCEND_RT_VISIBLE_DEVICES=0
+vllm-omni serve /path/to/qwen3_tts_VoiceDesign \
+    --omni \
+    --host 0.0.0.0 \
+    --port 8998
+```
+
+测试
+```
+curl -X POST http://localhost:8998/v1/audio/speech \
+    -H "Content-Type: application/json" \
+    -d '{
+        "input": "Hello world",
+        "task_type": "VoiceDesign",
+        "instructions": "A warm, friendly female voice with a gentle tone"
+    }' --output designed.wav
+```
+
+压测
+```
+vllm bench serve --omni \
+    --host 127.0.0.1 --port 8998 \
+    --model /path/to/qwen3_tts_VoiceDesign \
+    --backend openai-audio-speech \
+    --endpoint /v1/audio/speech \
+    --dataset-name seed-tts-design \
+    --dataset-path /vllm-workspace/vllm-omni/benchmarks/build_dataset/seed_tts_design \
+    --num-prompts 5 \
+    --extra-body '{"task_type":"VoiceDesign","language":"English"}' \
+    --max-concurrency 1 \
+    --percentile-metrics ttft,e2el,audio_ttfp,audio_rtf,audio_duration \
+    --num-warmups 2
 ```
