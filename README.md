@@ -54,3 +54,9 @@ pip install onnxruntime-cann>=1.23.2 \
     pyzmq>=25.0.0 janus>=1.0.0 pydub
 cd /vllm-workspace/vllm-omni && VLLM_OMNI_TARGET_DEVICE=npu pip install -e ".[npu]" --no-build-isolation
 ```
+
+模型下载使用modelscpoe
+```
+pip install modelscope
+modelscope download --model 'Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice' --local_dir '/path/to/qwen3_tts_CustomVoice'
+```
